@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="de" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ivica Anic | KI-Chatbot-Entwickler & B2B Integrationen</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: {
+                            800: '#0a172c',
+                            900: '#051329',
+                            950: '#020b18',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .chat-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+
+        body {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="font-sans h-screen overflow-hidden text-slate-800 p-3 md:p-4 lg:p-5 flex flex-col justify-between select-none">
+
+    <!-- KOMPAKTES DASHBOARD-GRID -->
+    <div class="max-w-[1600px] mx-auto w-full h-full flex flex-col gap-3 min-h-0 relative">
+        
+        <!-- TOP HEADER & KONTAKT -->
+        <header class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shrink-0">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="px-3 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs font-bold uppercase tracking-wider">
+                        KI-Chatbot & Integrationen
+                    </span>
+                </div>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                    Ivica Anic
+                </h1>
+                <p class="text-sm font-bold text-blue-700 mt-0.5">Spezialist für intelligente Chatbots & Prozessautomatisierung</p>
+                <p class="text-xs md:text-sm text-slate-600 mt-1 max-w-3xl leading-snug">
+                    Ich helfe Unternehmen dabei, moderne KI-Assistenten nahtlos in ihre bestehende Website zu integrieren. Steigern Sie die Kundenzufriedenheit durch 24/7-Support und entlasten Sie gleichzeitig Ihr Service-Team spürbar.
+                </p>
+            </div>
+
+            <!-- Kontakt-Card -->
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-wrap md:flex-col gap-2 text-xs md:text-sm font-medium text-slate-700 shrink-0">
+                <a href="tel:+4915235862002" class="hover:text-blue-600 transition flex items-center gap-2">
+                    <i class="fa-solid fa-phone text-blue-600 w-4"></i> +49 152 358 62002
+                </a>
+                <a href="mailto:delfa.anic@gmail.com" class="hover:text-blue-600 transition flex items-center gap-2">
+                    <i class="fa-solid fa-envelope text-blue-600 w-4"></i> delfa.anic@gmail.com
+                </a>
+                <span class="text-slate-500 text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-location-dot text-emerald-500 w-4"></i> Remote / Vor Ort
+                </span>
+            </div>
+        </header>
+
+        <!-- HAUPT-BEREICH GRID -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 flex-1 min-h-0 relative">
+            
+            <!-- LINKE SPALTE: B2B VORTEILE & TECHNOLOGIE -->
+            <div id="main-content-col" class="lg:col-span-12 flex flex-col gap-3 min-h-0 transition-all duration-300">
+                
+                <!-- VORTEILE (3 CARDS NEBENEINANDER) -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm shrink-0">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2.5">Warum ein KI-Chatbot für Ihr Unternehmen?</h2>
+                    <div class="grid md:grid-cols-3 gap-3">
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            <div class="w-8 h-8 bg-emerald-100 text-emerald-700 rounded-lg flex items-center justify-center text-sm mb-2">
+                                <i class="fa-solid fa-piggy-bank"></i>
+                            </div>
+                            <h3 class="font-bold text-sm text-slate-900 leading-snug">Supportkosten um bis zu 80% reduzieren</h3>
+                            <p class="text-slate-600 text-xs mt-1 leading-relaxed">Durch automatische Antworten auf wiederkehrende Kundenfragen senken Sie Ihre Supportkosten drastisch um bis zu 80 % und entlasten Ihr Team nachhaltig.</p>
+                        </div>
+
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            <div class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm mb-2">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+                            <h3 class="font-bold text-sm text-slate-900 leading-snug">Sehr schnelle & unkomplizierte Integration</h3>
+                            <p class="text-slate-600 text-xs mt-1 leading-relaxed">Die Einbindung in Ihre bestehende Firmenwebsite erfolgt in wenigen Schritten ohne komplexen Aufwand oder Ausfallzeiten Ihres laufenden Systems.</p>
+                        </div>
+
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            <div class="w-8 h-8 bg-purple-100 text-purple-700 rounded-lg flex items-center justify-center text-sm mb-2">
+                                <i class="fa-solid fa-vial"></i>
+                            </div>
+                            <h3 class="font-bold text-sm text-slate-900 leading-snug">Prototyp im Voraus inklusive</h3>
+                            <p class="text-slate-600 text-xs mt-1 leading-relaxed">Auf Ihre Anfrage hin erstelle ich unverbindlich einen individuellen Prototyp mit KI-RAG-Auswertung, der direkt mit Ihren Unterlagen getestet werden kann.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TECHNOLOGIE & ABLAUF -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex-1 flex flex-col justify-between min-h-0">
+                    <div>
+                        <span class="inline-block px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold uppercase tracking-wider mb-1.5">
+                            Technologie-Erklärung & Prototyping
+                        </span>
+                        <h2 class="text-base font-bold text-slate-900 leading-tight">Wie funktioniert die KI-Dokumentenanalyse (RAG)?</h2>
+                        <p class="text-slate-600 text-xs md:text-sm mt-1 leading-relaxed">
+                            Mit moderner <strong>RAG-Technologie (Retrieval-Augmented Generation)</strong> durchsucht der Bot gezielt Ihre Dokumente (PDFs, Anleitungen, AGBs). Ich erstelle für Sie vorab einen maßgeschneiderten Prototyp, damit Sie die präzise Auswertung auf Basis Ihrer eigenen Unternehmensdaten unverbindlich testen können.
+                        </p>
+                    </div>
+
+                    <!-- 4 SCHRITTE GRID -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 mt-3">
+                        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-center flex flex-col items-center justify-center">
+                            <div class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs mb-1 shadow-sm">1</div>
+                            <h4 class="font-bold text-slate-800 text-xs leading-tight">Anfrage & Daten</h4>
+                            <p class="text-slate-500 text-[11px] mt-1 leading-tight">Sie senden Ihre Anforderungen und optional erste Infodokumente.</p>
+                        </div>
+
+                        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-center flex flex-col items-center justify-center">
+                            <div class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs mb-1 shadow-sm">2</div>
+                            <h4 class="font-bold text-slate-800 text-xs leading-tight">Prototyp-Erstellung</h4>
+                            <p class="text-slate-500 text-[11px] mt-1 leading-tight">Ich baue im Voraus einen funktionsfähigen Demo-Bot für Sie auf.</p>
+                        </div>
+
+                        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-center flex flex-col items-center justify-center">
+                            <div class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs mb-1 shadow-sm">3</div>
+                            <h4 class="font-bold text-slate-800 text-xs leading-tight">KI-RAG Auswertung</h4>
+                            <p class="text-slate-500 text-[11px] mt-1 leading-tight">Die KI filtert Antworten in Echtzeit präzise aus Ihren Quelltexten heraus.</p>
+                        </div>
+
+                        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-center flex flex-col items-center justify-center">
+                            <div class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs mb-1 shadow-sm">4</div>
+                            <h4 class="font-bold text-slate-800 text-xs leading-tight">Schnelle Integration</h4>
+                            <p class="text-slate-500 text-[11px] mt-1 leading-tight">Unkomplizierte Live-Schaltung auf Ihrer bestehenden Webseite.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LIVE DEMO BANNER -->
+                <section class="bg-navy-900 text-white p-3.5 rounded-2xl shadow-md flex items-center justify-between gap-3 shrink-0">
+                    <div>
+                        <span class="text-amber-400 text-xs font-extrabold uppercase tracking-widest">Live-Demonstration</span>
+                        <h3 class="text-sm font-bold leading-tight mt-0.5">Testen Sie den KI-Assistenten live!</h3>
+                        <p class="text-slate-300 text-xs leading-tight mt-0.5">Klicken Sie unten rechts auf das Bot-Symbol oder hier auf den Button, um das Chat-Fenster zu öffnen.</p>
+                    </div>
+                    <button onclick="toggleChatWindow(true)" class="bg-amber-400 hover:bg-amber-500 text-navy-950 font-bold px-4 py-2 rounded-xl text-xs md:text-sm shadow-sm transition shrink-0 cursor-pointer">
+                        Demo-Chat Öffnen <i class="fa-solid fa-comments ml-1.5"></i>
+                    </button>
+                </section>
+            </div>
+
+            <!-- RECHTE SPALTE: CHATBOT WIDGET MIT ANSPRECHENDER ÜBERSCHRIFT -->
+            <div id="chat-col" class="hidden lg:col-span-5 relative flex-col gap-2 h-full min-h-0">
+                
+                <!-- SCHÖNE HEADER-BANNER ÜBERSCHRIFT ÜBER DEM CHAT -->
+                <div class="bg-gradient-to-r from-navy-900 to-blue-900 text-white px-4 py-2.5 rounded-xl border border-navy-800 shadow-md flex items-center gap-3 shrink-0 animate-fade-in">
+                    <div class="w-8 h-8 rounded-full bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-amber-400 shrink-0">
+                        <i class="fa-solid fa-comments text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs md:text-sm font-bold text-amber-400 leading-tight">
+                            Ich bin Ihr KI-Support-Assistent! 👋
+                        </h3>
+                        <p class="text-[11px] text-slate-200 leading-tight">
+                            Stellen Sie mir eine Frage oder wählen Sie ein vorgegebenes Thema aus.
+                        </p>
+                    </div>
+                </div>
+
+                <div id="chat-widget" class="w-full flex-1 bg-slate-100 rounded-2xl shadow-2xl border border-slate-300 flex flex-col overflow-hidden transition-all duration-300 min-h-0">
+                    
+                    <header class="bg-navy-900 text-white px-4 py-3 flex items-center justify-between border-b border-navy-800 shrink-0">
+                        <div class="flex items-center space-x-2.5">
+                            <div class="w-8 h-8 rounded-full bg-navy-800 border border-amber-400/50 flex items-center justify-center text-amber-400 shadow-inner">
+                                <i class="fa-solid fa-robot text-sm"></i>
+                            </div>
+                            <div>
+                                <h2 class="font-bold text-sm leading-tight tracking-wide">Digitaler Assistent</h2>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-1.5">
+                            <button onclick="toggleChatWindow(false)" title="Minimieren" class="w-7 h-7 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 flex items-center justify-center text-xs transition">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                            <button onclick="resetChat()" title="Neustarten" class="w-7 h-7 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 flex items-center justify-center text-xs transition">
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </button>
+                            <button onclick="toggleChatWindow(false)" title="Schließen" class="w-7 h-7 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 flex items-center justify-center text-xs transition">
+                                <i class="fa-solid fa-xmark text-sm"></i>
+                            </button>
+                        </div>
+                    </header>
+
+                    <!-- CHAT-VERLAUF BEREICH -->
+                    <div id="chat-body" class="flex-1 p-3.5 overflow-y-auto chat-scroll space-y-3 bg-slate-100 text-xs md:text-sm"></div>
+
+                    <!-- EINGABE-LEISTE -->
+                    <footer class="bg-white p-2.5 border-t border-slate-200 shrink-0">
+                        <form id="chat-form" onsubmit="handleUserSubmit(event)" class="relative flex items-center">
+                            <input 
+                                type="text" 
+                                id="user-input"
+                                placeholder="Tippen Sie Ihre Frage ein..."
+                                class="w-full bg-slate-50 text-slate-800 pl-4 pr-10 py-2 rounded-full border border-slate-300 focus:outline-none focus:border-navy-800 text-xs md:text-sm transition placeholder-slate-400"
+                                autocomplete="off"
+                            />
+                            <button 
+                                type="submit" 
+                                class="absolute right-1.5 text-slate-500 hover:text-navy-900 w-7 h-7 rounded-full flex items-center justify-center transition active:scale-95"
+                                title="Absenden"
+                            >
+                                <i class="fa-solid fa-chevron-right text-xs md:text-sm"></i>
+                            </button>
+                        </form>
+                    </footer>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- BOT LAUNCHER BUTTON (INITIAL SICHTBAR) -->
+        <div id="chat-launcher-container" class="fixed bottom-6 right-6 z-50">
+            <button id="open-chat-btn" onclick="toggleChatWindow(true)" class="relative w-14 h-14 bg-navy-900 hover:bg-navy-800 text-white rounded-full flex items-center justify-center shadow-2xl transition-all transform hover:scale-110 active:scale-95 focus:outline-none cursor-pointer border-2 border-amber-400/30">
+                <div class="relative flex items-center justify-center">
+                    <i class="fa-solid fa-robot text-2xl text-amber-400"></i>
+                    <span class="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-amber-500"></span>
+                    </span>
+                </div>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIK -->
+    <script>
+        const chatBody = document.getElementById('chat-body');
+        const chatCol = document.getElementById('chat-col');
+        const mainContentCol = document.getElementById('main-content-col');
+        const chatLauncher = document.getElementById('chat-launcher-container');
+
+        const INITIAL_WELCOME = {
+            botCard: {
+                title: "Hallo!",
+                text: "Ich bin der Kundenservice-Demonstrator von Ivica Anic. Ich zeige Ihnen, wie ein KI-gestützter Chatbot Fragen auf Ihrer Firmenwebsite automatisch beantworten kann.",
+                note: "Hinweis: Testen Sie mich mit Buttons oder eigenen Fragen."
+            },
+            topics: [
+                { id: 'order', label: 'Bestellung & Versand' },
+                { id: 'return', label: 'Rückgabe & Garantie' },
+                { id: 'smarthome', label: 'Smart Home Support' },
+                { id: 'account', label: 'Konto & Login' },
+                { id: 'payment', label: 'Zahlungsarten' },
+                { id: 'stores', label: 'Märkte & Öffnungszeiten' },
+                { id: 'all', label: 'Alle verfügbaren Themen' }
+            ]
+        };
+
+        const STATIC_RESPONSES = {
+            'Bestellung & Versand': "Standardbestellungen werden innerhalb von 1-3 Werktagen per DHL geliefert. Ab einem Bestellwert von 50 € ist der Versand für Sie kostenfrei.",
+            'Rückgabe & Garantie': "Sie haben ein 30-tägiges Rückgaberecht. Alle unsere Produkte verfügen zudem über eine gesetzliche Gewährleistung von 24 Monaten.",
+            'Smart Home Support': "Unsere Smart-Home-Produkte unterstützen Apple HomeKit, Google Home und Amazon Alexa. Zur Einrichtung verbinden Sie das Gerät einfach über unsere App.",
+            'Konto & Login': "Ihr Passwort können Sie jederzeit über den Link 'Passwort vergessen' im Login-Bereich zurücksetzen.",
+            'Zahlungsarten': "Wir akzeptieren PayPal, Kreditkarte (Visa/Mastercard), Klarna Rechnungskauf sowie SEPA-Überweisung.",
+            'Märkte & Öffnungszeiten': "Unsere Filialen sind gewöhnlich Montag bis Samstag von 09:00 bis 20:00 Uhr für Sie geöffnet.",
+            'Alle verfügbaren Themen': "Hier sind alle Bereiche, zu denen ich Auskunft geben kann: Bestellungen, Rückgaben, Smart Home, Kundenkonten, Zahlungen sowie Filialinfos."
+        };
+
+        function toggleChatWindow(show) {
+            if (show) {
+                chatCol.classList.remove('hidden');
+                chatCol.classList.add('flex');
+                mainContentCol.classList.remove('lg:col-span-12');
+                mainContentCol.classList.add('lg:col-span-7');
+                chatLauncher.classList.add('hidden');
+                
+                if (chatBody.children.length === 0) {
+                    renderWelcomeScreen();
+                }
+            } else {
+                chatCol.classList.add('hidden');
+                chatCol.classList.remove('flex');
+                mainContentCol.classList.remove('lg:col-span-7');
+                mainContentCol.classList.add('lg:col-span-12');
+                chatLauncher.classList.remove('hidden');
+            }
+        }
+
+        function resetChat() {
+            chatBody.innerHTML = '';
+            renderWelcomeScreen();
+        }
+
+        function renderWelcomeScreen() {
+            const container = document.createElement('div');
+            container.className = 'space-y-3 animate-fade-in';
+
+            const botBox = document.createElement('div');
+            botBox.className = 'bg-navy-900 text-white p-3.5 rounded-xl border border-navy-800 text-xs md:text-sm space-y-1.5 shadow-md';
+            botBox.innerHTML = `
+                <p class="font-bold text-sm text-amber-400">${INITIAL_WELCOME.botCard.title}</p>
+                <p class="leading-relaxed text-slate-200 text-xs md:text-sm">${INITIAL_WELCOME.botCard.text}</p>
+                <p class="leading-relaxed text-slate-300 text-xs"><strong>${INITIAL_WELCOME.botCard.note.split(':')[0]}:</strong> ${INITIAL_WELCOME.botCard.note.split(':')[1]}</p>
+            `;
+            container.appendChild(botBox);
+
+            const grid = document.createElement('div');
+            grid.className = 'grid grid-cols-2 gap-2 pt-1';
+
+            INITIAL_WELCOME.topics.slice(0, 6).forEach(topic => {
+                const btn = document.createElement('button');
+                btn.className = 'bg-navy-900 hover:bg-navy-800 text-white font-medium text-xs py-2.5 px-2 rounded-lg border border-navy-800 shadow-sm transition text-center flex items-center justify-center leading-tight cursor-pointer';
+                btn.innerText = topic.label;
+                btn.onclick = () => handleButtonClick(topic.label);
+                grid.appendChild(btn);
+            });
+
+            container.appendChild(grid);
+
+            const fullBtn = document.createElement('button');
+            fullBtn.className = 'w-full bg-navy-900 hover:bg-navy-800 text-white font-medium text-xs py-2.5 px-2 rounded-lg border border-navy-800 shadow-sm transition text-center cursor-pointer';
+            fullBtn.innerText = INITIAL_WELCOME.topics[6].label;
+            fullBtn.onclick = () => handleButtonClick(INITIAL_WELCOME.topics[6].label);
+            container.appendChild(fullBtn);
+
+            chatBody.appendChild(container);
+            scrollToBottom();
+        }
+
+        function generateResponse(userQueryText) {
+            if (STATIC_RESPONSES[userQueryText]) {
+                return STATIC_RESPONSES[userQueryText];
+            }
+
+            const lower = userQueryText.toLowerCase();
+
+            if (lower.includes('versand') || lower.includes('liefer') || lower.includes('dauer') || lower.includes('bestell')) {
+                return STATIC_RESPONSES['Bestellung & Versand'];
+            } else if (lower.includes('rück') || lower.includes('retour') || lower.includes('garantie')) {
+                return STATIC_RESPONSES['Rückgabe & Garantie'];
+            } else if (lower.includes('smart') || lower.includes('app') || lower.includes('alexa')) {
+                return STATIC_RESPONSES['Smart Home Support'];
+            } else if (lower.includes('konto') || lower.includes('login') || lower.includes('passwort')) {
+                return STATIC_RESPONSES['Konto & Login'];
+            } else if (lower.includes('zahl') || lower.includes('paypal') || lower.includes('rechnung') || lower.includes('karte')) {
+                return STATIC_RESPONSES['Zahlungsarten'];
+            } else if (lower.includes('öffnungszeit') || lower.includes('markt') || lower.includes('filiale') || lower.includes('laden')) {
+                return STATIC_RESPONSES['Märkte & Öffnungszeiten'];
+            } else if (lower.includes('hallo') || lower.includes('hi') || lower.includes('guten tag')) {
+                return "Hallo! Wie kann ich Ihnen heute weiterhelfen? Bitte wählen Sie eines der Themen aus oder stellen Sie Ihre Frage.";
+            }
+
+            return `Vielen Dank für Ihre Anfrage zu "${userQueryText}". In der vollständigen Integration verbindet sich dieser Bot mit Ihren PDFs & Systemen (RAG), um auch hochspezifische Fragen präzise zu beantworten.`;
+        }
+
+        function sendApiRequest(userQueryText) {
+            appendUserMessage(userQueryText);
+            const loadingId = appendLoadingIndicator();
+
+            setTimeout(() => {
+                removeLoadingIndicator(loadingId);
+                const botReply = generateResponse(userQueryText);
+                appendBotAnswer(botReply);
+            }, 500);
+        }
+
+        function handleButtonClick(buttonText) {
+            sendApiRequest(buttonText);
+        }
+
+        function handleUserSubmit(event) {
+            event.preventDefault();
+            const input = document.getElementById('user-input');
+            const query = input.value.trim();
+
+            if (!query) return;
+            input.value = '';
+
+            sendApiRequest(query);
+        }
+
+        function appendUserMessage(text) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'flex justify-end my-2 animate-fade-in';
+            const userBubble = document.createElement('div');
+            userBubble.className = 'bg-white text-slate-900 px-3.5 py-2 rounded-2xl rounded-tr-none border border-slate-300 text-xs md:text-sm font-medium shadow-sm max-w-[85%] break-words';
+            userBubble.innerText = text;
+            wrapper.appendChild(userBubble);
+            chatBody.appendChild(wrapper);
+            scrollToBottom();
+        }
+
+        function appendBotAnswer(text) {
+            const container = document.createElement('div');
+            container.className = 'space-y-2 animate-fade-in';
+
+            const botCard = document.createElement('div');
+            botCard.className = 'relative bg-navy-900 text-white p-3 rounded-xl border border-navy-800 text-xs md:text-sm space-y-1.5 shadow-md pr-8';
+            botCard.innerHTML = `
+                <p class="leading-relaxed text-slate-100 text-xs md:text-sm">${text}</p>
+                <div class="absolute -bottom-2 right-2 bg-white border border-slate-300 rounded px-1.5 py-0.5 flex items-center space-x-1.5 text-slate-600 shadow-sm text-[10px]">
+                    <button onclick="rateAnswer(this, 'up')" class="hover:text-emerald-600 transition"><i class="fa-regular fa-thumbs-up"></i></button>
+                    <div class="w-px h-2.5 bg-slate-300"></div>
+                    <button onclick="rateAnswer(this, 'down')" class="hover:text-red-600 transition"><i class="fa-regular fa-thumbs-down"></i></button>
+                </div>
+            `;
+            container.appendChild(botCard);
+            chatBody.appendChild(container);
+            scrollToBottom();
+        }
+
+        function appendLoadingIndicator() {
+            const id = 'loading-' + Date.now();
+            const wrapper = document.createElement('div');
+            wrapper.id = id;
+            wrapper.className = 'bg-navy-900 text-amber-400 p-2.5 rounded-xl border border-navy-800 text-xs w-28 flex items-center space-x-2 animate-fade-in';
+            wrapper.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Lädt...</span>`;
+            chatBody.appendChild(wrapper);
+            scrollToBottom();
+            return id;
+        }
+
+        function removeLoadingIndicator(id) {
+            const elem = document.getElementById(id);
+            if (elem) elem.remove();
+        }
+
+        function rateAnswer(btn, type) {
+            const parent = btn.parentElement;
+            parent.innerHTML = `<span class="text-[10px] font-semibold ${type === 'up' ? 'text-emerald-600' : 'text-slate-600'}">Danke!</span>`;
+        }
+
+        function scrollToBottom() {
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    </script>
+</body>
+</html>
