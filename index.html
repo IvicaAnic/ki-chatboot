@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="de" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ivica Anic | KI-Chatbot-Entwickler & B2B Integrationen</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Playfair Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        navy: {
+                            800: '#0a172c',
+                            900: '#051329',
+                            950: '#020b18',
+                        },
+                        burgundy: {
+                            800: '#4a0e17',
+                            900: '#32070d',
+                            950: '#1f0307',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .chat-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+
+        body {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="font-sans h-screen overflow-hidden text-slate-800 p-3 md:p-4 lg:p-5 flex flex-col justify-between select-none">
+
+    <!-- KOMPAKTES DASHBOARD-LAYOUT -->
+    <div class="max-w-[1600px] mx-auto w-full h-full flex flex-col gap-3 min-h-0 relative">
+        
+        <!-- TOP HEADER & KONTAKT -->
+        <header class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shrink-0">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span id="header-badge" class="px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors duration-300">
+                        KI-Chatbot & Integrationen
+                    </span>
+                </div>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                    Ivica Anic
+                </h1>
+                <p id="header-subtitle" class="text-sm font-bold mt-0.5 transition-colors duration-300">Spezialist für intelligente Chatbots & Prozessautomatisierung</p>
+                <p class="text-xs md:text-sm text-slate-600 mt-1 max-w-3xl leading-snug">
+                    Ich helfe Unternehmen dabei, moderne KI-Assistenten nahtlos in ihre bestehende Website zu integrieren. Steigern Sie die Kundenzufriedenheit durch 24/7-Support und entlasten Sie gleichzeitig Ihr Service-Team spürbar.
+                </p>
+            </div>
+
+            <!-- Kontakt-Card -->
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-wrap md:flex-col gap-2 text-xs md:text-sm font-medium text-slate-700 shrink-0">
+                <a href="tel:+4915235862002" class="hover:text-blue-600 transition flex items-center gap-2">
+                    <i class="fa-solid fa-phone text-blue-600 w-4"></i> +49 152 358 62002
+                </a>
+                <a href="mailto:delfa.anic@gmail.com" class="hover:text-blue-600 transition flex items-center gap-2">
+                    <i class="fa-solid fa-envelope text-blue-600 w-4"></i> delfa.anic@gmail.com
+                </a>
+                <span class="text-slate-500 text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-location-dot text-emerald-500 w-4"></i> Remote / Vor Ort
+                </span>
+            </div>
+        </header>
+
+        <!-- BRANCHEN-NAVIGATOR (SWITCHER) -->
+        <nav class="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm shrink-0 flex items-center justify-between gap-3 overflow-x-auto">
+            <div class="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-wider px-2 shrink-0">
+                <i class="fa-solid fa-sliders text-blue-600"></i> Demo-Branche wählen:
+            </div>
+            <div class="flex items-center gap-2 overflow-x-auto">
+                <button id="nav-btn-general" onclick="switchIndustry('general')" class="px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition flex items-center gap-2 cursor-pointer shrink-0">
+                    <i class="fa-solid fa-store"></i> Handel & E-Commerce
+                </button>
+                <button id="nav-btn-realestate" onclick="switchIndustry('realestate')" class="px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition flex items-center gap-2 cursor-pointer shrink-0">
+                    <i class="fa-solid fa-building"></i> Immobilienbranche
+                </button>
+                <button id="nav-btn-craftsman" onclick="switchIndustry('craftsman')" class="px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition flex items-center gap-2 cursor-pointer shrink-0">
+                    <i class="fa-solid fa-screwdriver-wrench"></i> Lokale Dienstleister & Handwerk
+                </button>
+                <button id="nav-btn-hospitality" onclick="switchIndustry('hospitality')" class="px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition flex items-center gap-2 cursor-pointer shrink-0">
+                    <i class="fa-solid fa-utensils"></i> Hotellerie & Gastronomie
+                </button>
+            </div>
+        </nav>
+
+        <!-- HAUPT-BEREICH FLEX-LAYOUT -->
+        <div class="flex flex-col lg:flex-row gap-3 flex-1 min-h-0 relative">
+            
+            <!-- LINKE SPALTE: B2B VORTEILE & TECHNOLOGIE -->
+            <div id="main-content-col" class="w-full flex-1 flex flex-col gap-3 min-h-0 transition-all duration-300">
+                
+                <!-- VORTEILE (3 CARDS NEBENEINANDER) -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm shrink-0">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2.5">Warum ein KI-Chatbot für Ihr Unternehmen?</h2>
+                    <div class="grid md:grid-cols-3 gap-3">
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            <div class="w-8 h-8 bg-emerald-100 text-emerald-700 rounded-lg flex items-center justify-center text-sm mb-2">
+                                <i class="fa-solid fa-piggy-bank"></i>
+                            </div>
+                            <h3 class="font-bold text-sm text-slate-900 leading-snug">Supportkosten um bis zu 80% reduzieren</h3>
+                            <p class="text-slate-600 text-xs mt-1 leading-relaxed">Durch automatische Antworten auf wiederkehrende Kundenfragen senken Sie Ihre Supportkosten drastisch um bis zu 80 % und entlasten Ihr Team nachhaltig.</p>
+                        </div>
+
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            <div class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm mb-2">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+                            <h3 class="font-bold text-sm text-slate-900 leading-snug">Sehr schnelle & unkomplizierte Integration</h3>
+                            <p class="text-slate-600 text-xs mt-1 leading-relaxed">Die Einbindung in Ihre bestehende Firmenwebsite erfolgt in wenigen Schritten ohne komplexen Aufwand oder Ausfallzeiten Ihres laufenden Systems.</p>
+                        </div>
+
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            <div class="w-8 h-8 bg-purple-100 text-purple-700 rounded-lg flex items-center justify-center text-sm mb-2">
+                                <i class="fa-solid fa-vial"></i>
+                            </div>
+                            <h3 class="font-bold text-sm text-slate-900 leading-snug">Prototyp im Voraus inklusive</h3>
+                            <p class="text-slate-600 text-xs mt-1 leading-relaxed">Auf Ihre Anfrage hin erstelle ich unverbindlich einen individuellen Prototyp mit KI-RAG-Auswertung, der direkt mit Ihren Unterlagen getestet werden kann.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TECHNOLOGIE, PRAXISBEISPIELE & VORTEILE -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex-1 flex flex-col justify-between min-h-0 overflow-y-auto">
+                    <div>
+                        <span class="inline-block px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold uppercase tracking-wider mb-1.5">
+                            Technologie-Erklärung & Praxis
+                        </span>
+                        <h2 class="text-base font-bold text-slate-900 leading-tight">Wie funktioniert die KI-Dokumentenanalyse (RAG) im Alltag?</h2>
+                        <p class="text-slate-600 text-xs md:text-sm mt-1 leading-relaxed">
+                            <strong>RAG (Retrieval-Augmented Generation)</strong> bedeutet einfach erklärt: Der Bot liest Ihre Handbücher, Speisekarten, Hotel-Infos oder Buchungsbedingungen und gibt Ihren Gästen und Kunden sofort die perfekte Antwort – rund um die Uhr.
+                        </p>
+
+                        <!-- PRAXIS-BEISPIELE GRID (DYNAMISCH JE NACH BRANCHE) -->
+                        <div id="industry-examples" class="grid md:grid-cols-2 gap-2.5 mt-3">
+                            <!-- Inhalt wird dynamisch via JS befüllt -->
+                        </div>
+
+                        <!-- VORTEILE FÜR MENSCHEN -->
+                        <div class="mt-3 bg-blue-50/50 p-2.5 rounded-xl border border-blue-100">
+                            <h3 class="font-bold text-xs text-blue-950 mb-1">Ihre Vorteile auf einen Blick:</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-2 text-[11px] text-slate-700">
+                                <span class="flex items-center gap-1.5 font-medium"><i class="fa-solid fa-circle-check text-emerald-600"></i> 24/7 Sofort-Antworten</span>
+                                <span class="flex items-center gap-1.5 font-medium"><i class="fa-solid fa-circle-check text-emerald-600"></i> Kein Dokumentensuchen</span>
+                                <span class="flex items-center gap-1.5 font-medium"><i class="fa-solid fa-circle-check text-emerald-600"></i> Leicht verständlich</span>
+                                <span class="flex items-center gap-1.5 font-medium"><i class="fa-solid fa-circle-check text-emerald-600"></i> Entlastet Telefon & E-Mail</span>
+                                <span class="flex items-center gap-1.5 font-medium"><i class="fa-solid fa-circle-check text-emerald-600"></i> Für alle Sprachen</span>
+                                <span class="flex items-center gap-1.5 font-medium"><i class="fa-solid fa-circle-check text-emerald-600"></i> Kostenloser Prototyp</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4 SCHRITTE GRID -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 mt-3 pt-2 border-t border-slate-100">
+                        <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 text-center flex flex-col items-center justify-center">
+                            <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-[11px] mb-1 shadow-sm">1</div>
+                            <h4 class="font-bold text-slate-800 text-xs leading-tight">Anfrage & Daten</h4>
+                            <p class="text-slate-500 text-[10px] mt-0.5 leading-tight">Sie senden erste Infos oder Anleitungen.</p>
+                        </div>
+
+                        <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 text-center flex flex-col items-center justify-center">
+                            <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-[11px] mb-1 shadow-sm">2</div>
+                            <h4 class="font-bold text-slate-800 text-xs leading-tight">Prototyp-Erstellung</h4>
+                            <p class="text-slate-500 text-[10px] mt-0.5 leading-tight">Ich baue einen kostenlosen Test-Bot.</p>
+                        </div>
+
+                        <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 text-center flex flex-col items-center justify-center">
+                            <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-[11px] mb-1 shadow-sm">3</div>
+                            <h4 class="font-bold text-slate-800 text-xs leading-tight">KI-Analyse</h4>
+                            <p class="text-slate-500 text-[10px] mt-0.5 leading-tight">Die KI liefert genaue Antworten aus Texten.</p>
+                        </div>
+
+                        <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 text-center flex flex-col items-center justify-center">
+                            <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-[11px] mb-1 shadow-sm">4</div>
+                            <h4 class="font-bold text-slate-800 text-xs leading-tight">Schnelle Integration</h4>
+                            <p class="text-slate-500 text-[10px] mt-0.5 leading-tight">Unkomplizierte Schaltung auf Ihrer Website.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LIVE DEMO BANNER -->
+                <section id="demo-banner" class="text-white p-3.5 rounded-2xl shadow-md flex items-center justify-between gap-3 shrink-0 transition-all duration-300">
+                    <div>
+                        <span id="banner-tag" class="text-xs font-extrabold uppercase tracking-widest transition-colors duration-300">Live-Demonstration</span>
+                        <h3 class="text-sm font-bold leading-tight mt-0.5">Testen Sie den KI-Assistenten live!</h3>
+                        <p class="text-slate-300 text-xs leading-tight mt-0.5">Klicken Sie unten rechts auf das Bot-Symbol oder hier auf den Button, um das Chat-Fenster zu öffnen.</p>
+                    </div>
+                    <button id="open-chat-btn-banner" onclick="toggleChatWindow(true)" class="font-bold px-4 py-2 rounded-xl text-xs md:text-sm shadow-sm transition shrink-0 cursor-pointer">
+                        Demo-Chat Öffnen <i class="fa-solid fa-comments ml-1.5"></i>
+                    </button>
+                </section>
+            </div>
+
+            <!-- RECHTE SPALTE: CHATBOT WIDGET (INITIAL GESCHLOSSEN - "hidden") -->
+            <div id="chat-col" class="hidden w-full lg:w-[400px] shrink-0 relative flex-col gap-2 h-full min-h-0">
+                
+                <!-- HEADER-BANNER ÜBERSCHRIFT -->
+                <div id="chat-banner-header" class="text-white px-4 py-2.5 rounded-xl border shadow-md flex items-center gap-3 shrink-0 animate-fade-in transition-all duration-300">
+                    <div id="chat-banner-icon-bg" class="w-8 h-8 rounded-full border flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-comments text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 id="chat-banner-title" class="text-xs md:text-sm font-bold leading-tight">
+                            Ich bin Ihr KI-Support-Assistent! 👋
+                        </h3>
+                        <p class="text-[11px] text-slate-200 leading-tight">
+                            Stellen Sie mir eine Frage oder wählen Sie ein vorgegebenes Thema aus.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- DYNAMISCHES CHAT-WIDGET MIT BRANDING-DESIGN -->
+                <div id="chat-widget" class="w-full flex-1 bg-slate-100 rounded-2xl shadow-2xl border border-slate-300 flex flex-col overflow-hidden transition-all duration-300 min-h-0">
+                    
+                    <header id="chat-widget-header" class="text-white px-4 py-3 flex items-center justify-between border-b shrink-0 transition-all duration-300">
+                        <div class="flex items-center space-x-2.5">
+                            <div id="chat-bot-icon-container" class="w-8 h-8 rounded-full border flex items-center justify-center shadow-inner">
+                                <i id="chat-bot-icon" class="fa-solid fa-robot text-sm"></i>
+                            </div>
+                            <div>
+                                <h2 id="chat-header-title" class="font-bold text-sm leading-tight tracking-wide">Digitaler Assistent</h2>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-1.5">
+                            <button onclick="toggleChatWindow(false)" title="Minimieren" class="w-7 h-7 rounded-lg bg-black/20 hover:bg-black/40 text-slate-200 flex items-center justify-center text-xs transition">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                            <button onclick="resetChat()" title="Neustarten" class="w-7 h-7 rounded-lg bg-black/20 hover:bg-black/40 text-slate-200 flex items-center justify-center text-xs transition">
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </button>
+                            <button onclick="toggleChatWindow(false)" title="Schließen" class="w-7 h-7 rounded-lg bg-black/20 hover:bg-black/40 text-slate-200 flex items-center justify-center text-xs transition">
+                                <i class="fa-solid fa-xmark text-sm"></i>
+                            </button>
+                        </div>
+                    </header>
+
+                    <!-- CHAT-VERLAUF BEREICH -->
+                    <div id="chat-body" class="flex-1 p-3.5 overflow-y-auto chat-scroll space-y-3 bg-slate-100 text-xs md:text-sm"></div>
+
+                    <!-- EINGABE-LEISTE -->
+                    <footer id="chat-footer" class="bg-white p-2.5 border-t border-slate-200 shrink-0">
+                        <form id="chat-form" onsubmit="handleUserSubmit(event)" class="relative flex items-center">
+                            <input 
+                                type="text" 
+                                id="user-input"
+                                placeholder="Tippen Sie Ihre Frage ein..."
+                                class="w-full bg-slate-50 text-slate-800 pl-4 pr-10 py-2 rounded-full border border-slate-300 focus:outline-none text-xs md:text-sm transition placeholder-slate-400"
+                                autocomplete="off"
+                            />
+                            <button 
+                                type="submit" 
+                                id="send-btn"
+                                class="absolute right-1.5 w-7 h-7 rounded-full flex items-center justify-center transition active:scale-95"
+                                title="Absenden"
+                            >
+                                <i class="fa-solid fa-chevron-right text-xs md:text-sm"></i>
+                            </button>
+                        </form>
+                    </footer>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- BOT LAUNCHER BUTTON (INITIAL SICHTBAR) -->
+        <div id="chat-launcher-container" class="fixed bottom-6 right-6 z-50">
+            <button id="open-chat-btn" onclick="toggleChatWindow(true)" class="relative w-14 h-14 text-white rounded-full flex items-center justify-center shadow-2xl transition-all transform hover:scale-110 active:scale-95 focus:outline-none cursor-pointer border-2">
+                <div class="relative flex items-center justify-center">
+                    <i id="launcher-icon" class="fa-solid fa-robot text-2xl"></i>
+                    <span class="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+                      <span id="ping-effect" class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"></span>
+                      <span id="ping-dot" class="relative inline-flex rounded-full h-3.5 w-3.5"></span>
+                    </span>
+                </div>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIK -->
+    <script>
+        const chatBody = document.getElementById('chat-body');
+        const chatCol = document.getElementById('chat-col');
+        const chatLauncher = document.getElementById('chat-launcher-container');
+
+        let currentIndustry = 'general';
+
+        // FARBSCHEMATA & DESIGN-STILE PRO BRANCHE
+        const THEMES = {
+            general: {
+                badge: 'bg-blue-100 text-blue-800',
+                subtitle: 'text-blue-700',
+                bannerBg: 'bg-navy-900',
+                bannerTag: 'text-amber-400',
+                bannerBtn: 'bg-amber-400 hover:bg-amber-500 text-navy-950',
+                chatBannerHeader: 'bg-gradient-to-r from-navy-900 to-blue-900 border-navy-800',
+                chatBannerIconBg: 'bg-amber-400/20 border-amber-400/40 text-amber-400',
+                chatBannerTitle: 'text-amber-400',
+                chatWidgetHeader: 'bg-navy-900 border-navy-800',
+                chatWidgetRadius: 'rounded-2xl',
+                chatBotIconContainer: 'bg-navy-800 border-amber-400/50 text-amber-400',
+                launcherBtn: 'bg-navy-900 hover:bg-navy-800 border-amber-400/30',
+                launcherIcon: 'text-amber-400',
+                pingEffect: 'bg-amber-400',
+                pingDot: 'bg-amber-500',
+                botMsgBg: 'bg-navy-900 border-navy-800 text-white',
+                botMsgTitle: 'text-amber-400',
+                topicBtn: 'bg-navy-900 hover:bg-navy-800 text-white border-navy-800 rounded-lg',
+                activeNav: 'bg-navy-900 text-white shadow-sm',
+                sendBtn: 'text-slate-500 hover:text-navy-900'
+            },
+            realestate: {
+                badge: 'bg-emerald-100 text-emerald-800',
+                subtitle: 'text-emerald-700',
+                bannerBg: 'bg-emerald-900',
+                bannerTag: 'text-emerald-300',
+                bannerBtn: 'bg-emerald-400 hover:bg-emerald-500 text-emerald-950',
+                chatBannerHeader: 'bg-gradient-to-r from-emerald-900 to-teal-900 border-emerald-800',
+                chatBannerIconBg: 'bg-emerald-400/20 border-emerald-400/40 text-emerald-300',
+                chatBannerTitle: 'text-emerald-300',
+                chatWidgetHeader: 'bg-emerald-900 border-emerald-800',
+                chatWidgetRadius: 'rounded-2xl',
+                chatBotIconContainer: 'bg-emerald-800 border-emerald-400/50 text-emerald-300',
+                launcherBtn: 'bg-emerald-900 hover:bg-emerald-800 border-emerald-400/30',
+                launcherIcon: 'text-emerald-300',
+                pingEffect: 'bg-emerald-400',
+                pingDot: 'bg-emerald-500',
+                botMsgBg: 'bg-emerald-900 border-emerald-800 text-white',
+                botMsgTitle: 'text-emerald-300',
+                topicBtn: 'bg-emerald-900 hover:bg-emerald-800 text-white border-emerald-800 rounded-lg',
+                activeNav: 'bg-emerald-900 text-white shadow-sm',
+                sendBtn: 'text-slate-500 hover:text-emerald-900'
+            },
+            craftsman: {
+                badge: 'bg-amber-100 text-amber-900',
+                subtitle: 'text-amber-700',
+                bannerBg: 'bg-amber-900',
+                bannerTag: 'text-amber-300',
+                bannerBtn: 'bg-amber-500 hover:bg-amber-600 text-amber-950',
+                chatBannerHeader: 'bg-gradient-to-r from-amber-900 to-orange-900 border-amber-800',
+                chatBannerIconBg: 'bg-amber-400/20 border-amber-400/40 text-amber-300',
+                chatBannerTitle: 'text-amber-300',
+                chatWidgetHeader: 'bg-amber-900 border-amber-800',
+                chatWidgetRadius: 'rounded-xl',
+                chatBotIconContainer: 'bg-amber-800 border-amber-400/50 text-amber-300',
+                launcherBtn: 'bg-amber-900 hover:bg-amber-800 border-amber-400/30',
+                launcherIcon: 'text-amber-300',
+                pingEffect: 'bg-amber-400',
+                pingDot: 'bg-amber-500',
+                botMsgBg: 'bg-amber-900 border-amber-800 text-white',
+                botMsgTitle: 'text-amber-300',
+                topicBtn: 'bg-amber-900 hover:bg-amber-800 text-white border-amber-800 rounded-md',
+                activeNav: 'bg-amber-900 text-white shadow-sm',
+                sendBtn: 'text-slate-500 hover:text-amber-900'
+            },
+            hospitality: {
+                badge: 'bg-rose-100 text-rose-900',
+                subtitle: 'text-rose-800 font-serif italic',
+                bannerBg: 'bg-burgundy-900',
+                bannerTag: 'text-rose-300',
+                bannerBtn: 'bg-rose-300 hover:bg-rose-400 text-burgundy-950',
+                chatBannerHeader: 'bg-gradient-to-r from-burgundy-900 to-rose-950 border-burgundy-800',
+                chatBannerIconBg: 'bg-rose-400/20 border-rose-300/40 text-rose-300',
+                chatBannerTitle: 'text-rose-300 font-serif',
+                chatWidgetHeader: 'bg-burgundy-900 border-burgundy-800',
+                chatWidgetRadius: 'rounded-3xl',
+                chatBotIconContainer: 'bg-burgundy-800 border-rose-300/50 text-rose-300',
+                launcherBtn: 'bg-burgundy-900 hover:bg-burgundy-800 border-rose-300/40',
+                launcherIcon: 'text-rose-300',
+                pingEffect: 'bg-rose-400',
+                pingDot: 'bg-rose-500',
+                botMsgBg: 'bg-burgundy-900 border-burgundy-800 text-white',
+                botMsgTitle: 'text-rose-300 font-serif',
+                topicBtn: 'bg-burgundy-900 hover:bg-burgundy-800 text-white border-burgundy-800 rounded-full',
+                activeNav: 'bg-burgundy-900 text-white shadow-sm',
+                sendBtn: 'text-slate-500 hover:text-burgundy-900'
+            }
+        };
+
+        // DATEN FÜR VERSCHIEDENE BRANCHEN
+        const INDUSTRY_DATA = {
+            general: {
+                headerTitle: "Digitaler Assistent",
+                bannerTitle: "Ich bin Ihr KI-Support-Assistent! 👋",
+                botIcon: "fa-robot",
+                welcomeCard: {
+                    title: "Hallo!",
+                    text: "Ich bin der Kundenservice-Demonstrator von Ivica Anic. Ich zeige Ihnen, wie ein KI-gestützter Chatbot Fragen auf Ihrer Firmenwebsite automatisch beantworten kann.",
+                    note: "Hinweis: Testen Sie mich mit Buttons oder eigenen Fragen."
+                },
+                topics: [
+                    { id: 'order', label: 'Bestellung & Versand' },
+                    { id: 'return', label: 'Rückgabe & Garantie' },
+                    { id: 'smarthome', label: 'Smart Home Support' },
+                    { id: 'account', label: 'Konto & Login' },
+                    { id: 'payment', label: 'Zahlungsarten' },
+                    { id: 'stores', label: 'Märkte & Öffnungszeiten' },
+                    { id: 'all', label: 'Alle verfügbaren Themen' }
+                ],
+                responses: {
+                    'Bestellung & Versand': "Standardbestellungen werden innerhalb von 1-3 Werktagen per DHL geliefert. Ab einem Bestellwert von 50 € ist der Versand für Sie kostenfrei.",
+                    'Rückgabe & Garantie': "Sie haben ein 30-tägiges Rückgaberecht. Alle unsere Produkte verfügen zudem über eine gesetzliche Gewährleistung von 24 Monaten.",
+                    'Smart Home Support': "Unsere Smart-Home-Produkte unterstützen Apple HomeKit, Google Home und Amazon Alexa. Zur Einrichtung verbinden Sie das Gerät einfach über unsere App.",
+                    'Konto & Login': "Ihr Passwort können Sie jederzeit über den Link 'Passwort vergessen' im Login-Bereich zurücksetzen.",
+                    'Zahlungsarten': "Wir akzeptieren PayPal, Kreditkarte (Visa/Mastercard), Klarna Rechnungskauf sowie SEPA-Überweisung.",
+                    'Märkte & Öffnungszeiten': "Unsere Filialen sind gewöhnlich Montag bis Samstag von 09:00 bis 20:00 Uhr für Sie geöffnet.",
+                    'Alle verfügbaren Themen': "Hier sind alle Bereiche, zu denen ich Auskunft geben kann: Bestellungen, Rückgaben, Smart Home, Kundenkonten, Zahlungen sowie Filialinfos."
+                },
+                examplesHtml: `
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-xs text-blue-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-boxes-packing text-blue-600"></i> Praxisbeispiel: E-Commerce & Handel
+                        </h3>
+                        <p class="text-slate-600 text-[11px] mt-1 leading-tight">
+                            <strong>Frage:</strong> "Wie sind die Lieferzeiten nach Österreich?"<br>
+                            <strong>KI-Antwort:</strong> Liest direkt aus Ihren Versandbedingungen die Lieferzeit (2-4 Tage) & Kosten vor.
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-xs text-blue-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-rotate-left text-blue-600"></i> Praxisbeispiel: Retouren & Garantie
+                        </h3>
+                        <p class="text-slate-600 text-[11px] mt-1 leading-tight">
+                            <strong>Frage:</strong> "Wie schicke ich ein defektes Gerät zurück?"<br>
+                            <strong>KI-Antwort:</strong> Zitiert präzise Ihre Garantie-Bedingungen und nennt die Rücksendeadresse.
+                        </p>
+                    </div>
+                `
+            },
+            realestate: {
+                headerTitle: "Immobilien-Assistent",
+                bannerTitle: "Willkommen beim Immobilien-Assistenten! 🏢",
+                botIcon: "fa-building",
+                welcomeCard: {
+                    title: "Hallo & Willkommen!",
+                    text: "Ich bin der Immobilien-KI-Assistent. Ich erstelle automatisierte Exposé-Auskünfte, erstelle Termine für Besichtigungen und beantworte Mieter- sowie Käuferfragen.",
+                    note: "Hinweis: Wählen Sie eines der Immobilien-Themen oder stellen Sie eine eigene Frage."
+                },
+                topics: [
+                    { id: 'expose', label: '3-Zimmer Wohnung (Exposé)' },
+                    { id: 'viewing', label: 'Besichtigungstermin' },
+                    { id: 'documents', label: 'Benötigte Unterlagen' },
+                    { id: 'commission', label: 'Maklerprovision & Kosten' },
+                    { id: 'pets', label: 'Haustierhaltung' },
+                    { id: 'parking', label: 'Stellplatz & Garage' },
+                    { id: 'all', label: 'Alle Immobilien-Infos' }
+                ],
+                responses: {
+                    '3-Zimmer Wohnung (Exposé)': "Objekt 'Müllerstraße 12': 3 Zimmer, 82 m², Etage 2 mit Aufzug. Kaltmiete: 980 € zzgl. 220 € Nebenkosten. Einbauküche und Balkon vorhanden. Bezugsfrei ab 01.11.2026.",
+                    'Besichtigungstermin': "Besichtigungen finden jeden Dienstag und Donnerstag zwischen 16:00 und 18:00 Uhr statt. Möchten Sie sich für einen freien Slot eintragen lassen?",
+                    'Benötigte Unterlagen': "Für die Bewerbung benötigen wir: Die letzten 3 Gehaltsnachweise, eine aktuelle SCHUFA-Auskunft, eine Ausweiskopie sowie eine Mietschuldenfreiheitsbescheinigung.",
+                    'Maklerprovision & Kosten': "Gemäß Bestellerprinzip fällt für Mieter keine Provision an. Bei Immobilienkäufen beträgt die Käuferprovision 3,57% inkl. MwSt. des verbrieften Kaufpreises.",
+                    'Haustierhaltung': "Kleintiere (z.B. Wellensittiche, Fische) sind generell gestattet. Für Hunde- und Katzenhaltung ist vorab die schriftliche Zustimmung des Vermieters einzuholen.",
+                    'Stellplatz & Garage': "Zur Wohnung gehört ein Tiefgaragenstellplatz für 70 € / Monat. Öffentliche Parkplätze befinden sich direkt vor der Wohnanlage.",
+                    'Alle Immobilien-Infos': "Ich helfe Ihnen bei Fragen zu Miet- und Kaufobjekten, Besichtigungsterminen, Unterlagen, Stellplätzen sowie Nebenkostenabrechnungen."
+                },
+                examplesHtml: `
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-xs text-emerald-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-house-user text-emerald-600"></i> Praxisbeispiel: Exposé & Mietdetails
+                        </h3>
+                        <p class="text-slate-600 text-[11px] mt-1 leading-tight">
+                            <strong>Frage:</strong> "Sind Haustiere im Objekt Parkstraße erlaubt?"<br>
+                            <strong>KI-Antwort:</strong> Liest direkt aus der Eigentümer-Vorgabe im Exposé vor.
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-xs text-emerald-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-calendar-check text-emerald-600"></i> Praxisbeispiel: Autom. Besichtigung
+                        </h3>
+                        <p class="text-slate-600 text-[11px] mt-1 leading-tight">
+                            <strong>Frage:</strong> "Wann kann ich die Wohnung besichtigen?"<br>
+                            <strong>KI-Antwort:</strong> Schlägt verfügbare Termine vor und sammelt Mieterdaten.
+                        </p>
+                    </div>
+                `
+            },
+            craftsman: {
+                headerTitle: "Handwerk & Service Bot",
+                bannerTitle: "Ihr Assistent für Handwerk & Dienstleistung! 🛠️",
+                botIcon: "fa-screwdriver-wrench",
+                welcomeCard: {
+                    title: "Willkommen beim Handwerker-Service!",
+                    text: "Ich unterstütze Sanitär-, Elektro-, Dachdecker- und Meisterbetriebe. Ich nehme Terminanfragen auf, kläre Notfälle, erkläre Anfahrtskosten und erstelle Erst-Einschätzungen.",
+                    note: "Hinweis: Klicken Sie auf ein Thema oder tippen Sie Ihr Anliegen ein."
+                },
+                topics: [
+                    { id: 'emergency', label: '🚨 Notdienst & Wasserrohrbruch' },
+                    { id: 'quote', label: 'Angebot & Kostenvoranschlag' },
+                    { id: 'appointment', label: 'Termin vereinbaren' },
+                    { id: 'travel', label: 'Anfahrtskosten & Gebiet' },
+                    { id: 'hours', label: 'Öffnungszeiten & Büro' },
+                    { id: 'warranty', label: 'Gewährleistung & Wartung' },
+                    { id: 'all', label: 'Alle Handwerker-Infos' }
+                ],
+                responses: {
+                    '🚨 Notdienst & Wasserrohrbruch': "Unser 24/7 Notdienst für Sanitär & Elektro ist unter der Hotline 0152 358 62002 erreichbar. Bitte drehen Sie bei Rohrbruch sofort den Hauptwasserhahn zu!",
+                    'Angebot & Kostenvoranschlag': "Für ein kostenloses Angebot benötigen wir kurze Fotos des Schadens/Projekts und Ihre PLZ. Ich kann Ihre Daten direkt für einen Meister-Rückruf aufnehmen.",
+                    'Termin vereinbaren': "Standard-Termine vergeben wir Mo-Fr von 07:30 bis 16:30 Uhr. Passt es Ihnen diese Woche Vormittags oder Nachmittags am besten?",
+                    'Anfahrtskosten & Gebiet': "Innerhalb von 15 km um unser Büro berechnen wir eine Pauschale von 29 €. Für jeden weiteren Kilometer fallen 1,20 € an.",
+                    'Öffnungszeiten & Büro': "Unser Büro ist Mo-Do von 07:30 - 17:00 Uhr und Fr von 07:30 - 14:30 Uhr besetzt. Notfälle werden rund um die Uhr bearbeitet.",
+                    'Gewährleistung & Wartung': "Wir gewähren auf alle Neuanlagen und Sanierungsarbeiten 5 Jahre VOB-Garantie. Zudem bieten wir jährliche Wartungsverträge für Heizungen an.",
+                    'Alle Handwerker-Infos': "Ich beantworte Fragen zu Notdienst, Terminvergabe, Kostenvoranschlägen, Anfahrtskosten, Wartung und Gewährleistung."
+                },
+                examplesHtml: `
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-xs text-amber-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-pipe-collar text-amber-600"></i> Praxisbeispiel: Sanitär & Notfall
+                        </h3>
+                        <p class="text-slate-600 text-[11px] mt-1 leading-tight">
+                            <strong>Frage:</strong> "Welches Öl braucht mein Motor Modell XY?"<br>
+                            <strong>KI-Antwort:</strong> Liest aus dem 200-seitigen PDF-Handbuch sofort die genaue Ölsorte heraus.
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-xs text-amber-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-calculator text-amber-600"></i> Praxisbeispiel: Angebote & Anfahrt
+                        </h3>
+                        <p class="text-slate-600 text-[11px] mt-1 leading-tight">
+                            <strong>Frage:</strong> "Was kostet der Einbau einer Wärmepumpe?"<br>
+                            <strong>KI-Antwort:</strong> Gibt Richtwerte aus Preislisten und erfasst Kontaktdaten für Angebot.
+                        </p>
+                    </div>
+                `
+            },
+            hospitality: {
+                headerTitle: "Hotel & Restaurant Concierge",
+                bannerTitle: "Ihr digitaler Hotel- & Gastro-Concierge! 🍽️🏨",
+                botIcon: "fa-bell-concierge",
+                welcomeCard: {
+                    title: "Herzlich Willkommen!",
+                    text: "Ich bin Ihr digitaler Concierge für Hotel & Gastronomie. Ich unterstütze bei Tischreservierungen, Speisekarten-Auskünften, Check-In Zeiten und Veranstaltungsanfragen.",
+                    note: "Hinweis: Wählen Sie eine Option oder fragen Sie direkt."
+                },
+                topics: [
+                    { id: 'table', label: '🍽️ Tisch reservieren' },
+                    { id: 'checkin', label: '🏨 Check-in / Check-out' },
+                    { id: 'menu', label: '🍷 Speisekarte & Vegan/Allergene' },
+                    { id: 'breakfast', label: '🥐 Frühstückszeiten & Buffet' },
+                    { id: 'parking', label: '🅿️ Parken & WLAN' },
+                    { id: 'events', label: '🎉 Feiern & Events' },
+                    { id: 'all', label: 'Alle Hotel & Gastro Infos' }
+                ],
+                responses: {
+                    '🍽️ Tisch reservieren': "Gerne! Unser Restaurant ist Dienstag bis Sonntag von 12:00 - 23:00 Uhr geöffnet. Für wie viele Personen und an welchem Datum möchten Sie einen Tisch reservieren?",
+                    '🏨 Check-in / Check-out': "Der Check-in ist ab 15:00 Uhr möglich. Wir bitten Sie, am Abreisetag bis 11:00 Uhr auszuchecken. Ein Late-Check-out ist auf Anfrage verfügbar.",
+                    '🍷 Speisekarte & Vegan/Allergene': "Unsere aktuelle Saisonkarte bietet eine große Auswahl an regionalen Spezialitäten sowie zahlreiche vegane, vegetarische und glutenfreie Gerichte.",
+                    '🥐 Frühstückszeiten & Buffet': "Unser reichhaltiges Frühstücksbuffet steht Ihnen werktags von 06:30 bis 10:30 Uhr und am Wochenende/Feiertagen von 07:00 bis 11:00 Uhr bereit.",
+                    '🅿️ Parken & WLAN': "Kostenfreie Gästeparkplätze stehen direkt hinter dem Haus bereit. Highspeed-WLAN ist im gesamten Hotel und Restaurant kostenfrei verfügbar (Netz: Guest_WiFi).",
+                    '🎉 Feiern & Events': "Ob Hochzeit, Geburtstage oder Firmenfeier: Unser Festsaal bietet Platz für bis zu 120 Personen. Ich erfasse gerne Ihre Kontaktdaten für unser Event-Team.",
+                    'Alle Hotel & Gastro Infos': "Ich beantworte Fragen zu Tischreservierungen, Zimmerbuchung, Speisekarte, Frühstückszeiten, Parken, WLAN und Veranstaltungen."
+                },
+                examplesHtml: `
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-xs text-rose-950 flex items-center gap-1.5 font-serif">
+                            <i class="fa-solid fa-utensils text-rose-700"></i> Praxisbeispiel: Digitale Speisekarte
+                        </h3>
+                        <p class="text-slate-600 text-[11px] mt-1 leading-tight">
+                            <strong>Frage:</strong> "Haben Sie laktosefreie Nachspeisen?"<br>
+                            <strong>KI-Antwort:</strong> Prüft die Speisekarte in Echtzeit und nennt direkt passende Gerichte.
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-xs text-rose-950 flex items-center gap-1.5 font-serif">
+                            <i class="fa-solid fa-concierge-bell text-rose-700"></i> Praxisbeispiel: Rezeption & Hotel-Infos
+                        </h3>
+                        <p class="text-slate-600 text-[11px] mt-1 leading-tight">
+                            <strong>Frage:</strong> "Wie lautet das WLAN-Passwort und wann ist Check-out?"<br>
+                            <strong>KI-Antwort:</strong> Entlastet die Rezeption sofort durch automatisierte Auskünfte.
+                        </p>
+                    </div>
+                `
+            }
+        };
+
+        function switchIndustry(industryKey) {
+            currentIndustry = industryKey;
+            const theme = THEMES[industryKey];
+            
+            // 1. NAV-BUTTONS FARBEN ANPASSEN
+            const inactiveClass = "px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition flex items-center gap-2 cursor-pointer bg-slate-100 text-slate-700 hover:bg-slate-200 shrink-0";
+            
+            document.getElementById('nav-btn-general').className = (industryKey === 'general') ? `px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition flex items-center gap-2 cursor-pointer shrink-0 ${theme.activeNav}` : inactiveClass;
+            document.getElementById('nav-btn-realestate').className = (industryKey === 'realestate') ? `px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition flex items-center gap-2 cursor-pointer shrink-0 ${theme.activeNav}` : inactiveClass;
+            document.getElementById('nav-btn-craftsman').className = (industryKey === 'craftsman') ? `px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition flex items-center gap-2 cursor-pointer shrink-0 ${theme.activeNav}` : inactiveClass;
+            document.getElementById('nav-btn-hospitality').className = (industryKey === 'hospitality') ? `px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition flex items-center gap-2 cursor-pointer shrink-0 ${theme.activeNav}` : inactiveClass;
+
+            // 2. HEADER & LAYOUT ELEMENTE UMFÄRBEN
+            document.getElementById('header-badge').className = `px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors duration-300 ${theme.badge}`;
+            document.getElementById('header-subtitle').className = `text-sm font-bold mt-0.5 transition-colors duration-300 ${theme.subtitle}`;
+
+            // Demo-Banner unten Umfärben
+            const demoBanner = document.getElementById('demo-banner');
+            demoBanner.className = `p-3.5 rounded-2xl shadow-md flex items-center justify-between gap-3 shrink-0 transition-all duration-300 ${theme.bannerBg}`;
+            document.getElementById('banner-tag').className = `text-xs font-extrabold uppercase tracking-widest transition-colors duration-300 ${theme.bannerTag}`;
+            document.getElementById('open-chat-btn-banner').className = `font-bold px-4 py-2 rounded-xl text-xs md:text-sm shadow-sm transition shrink-0 cursor-pointer ${theme.bannerBtn}`;
+
+            // 3. CHAT WIDGET RADIUS & STYLING
+            const widget = document.getElementById('chat-widget');
+            widget.className = `w-full flex-1 bg-slate-100 ${theme.chatWidgetRadius} shadow-2xl border border-slate-300 flex flex-col overflow-hidden transition-all duration-300 min-h-0`;
+
+            document.getElementById('chat-banner-header').className = `text-white px-4 py-2.5 rounded-xl border shadow-md flex items-center gap-3 shrink-0 animate-fade-in transition-all duration-300 ${theme.chatBannerHeader}`;
+            document.getElementById('chat-banner-icon-bg').className = `w-8 h-8 rounded-full border flex items-center justify-center shrink-0 ${theme.chatBannerIconBg}`;
+            document.getElementById('chat-banner-title').className = `text-xs md:text-sm font-bold leading-tight ${theme.chatBannerTitle}`;
+
+            document.getElementById('chat-widget-header').className = `text-white px-4 py-3 flex items-center justify-between border-b shrink-0 transition-all duration-300 ${theme.chatWidgetHeader}`;
+            document.getElementById('chat-bot-icon-container').className = `w-8 h-8 rounded-full border flex items-center justify-center shadow-inner ${theme.chatBotIconContainer}`;
+
+            // Chat Floating Launcher Button Umfärben
+            const launcherBtn = document.getElementById('open-chat-btn');
+            launcherBtn.className = `relative w-14 h-14 text-white rounded-full flex items-center justify-center shadow-2xl transition-all transform hover:scale-110 active:scale-95 focus:outline-none cursor-pointer border-2 ${theme.launcherBtn}`;
+            document.getElementById('launcher-icon').className = `fa-solid ${INDUSTRY_DATA[industryKey].botIcon} text-2xl ${theme.launcherIcon}`;
+            document.getElementById('ping-effect').className = `animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${theme.pingEffect}`;
+            document.getElementById('ping-dot').className = `relative inline-flex rounded-full h-3.5 w-3.5 ${theme.pingDot}`;
+
+            document.getElementById('send-btn').className = `absolute right-1.5 w-7 h-7 rounded-full flex items-center justify-center transition active:scale-95 ${theme.sendBtn}`;
+
+            // 4. PRAXISBEISPIELE INHALT TAUSCHEN
+            document.getElementById('industry-examples').innerHTML = INDUSTRY_DATA[industryKey].examplesHtml;
+
+            // 5. CHAT-WIDGET HEADER TEXT & ICON ANPASSEN
+            document.getElementById('chat-header-title').innerText = INDUSTRY_DATA[industryKey].headerTitle;
+            document.getElementById('chat-banner-title').innerText = INDUSTRY_DATA[industryKey].bannerTitle;
+            document.getElementById('chat-bot-icon').className = `fa-solid ${INDUSTRY_DATA[industryKey].botIcon} text-sm`;
+
+            // Reset & Rendern im Chat
+            resetChat();
+        }
+
+        function toggleChatWindow(show) {
+            if (show) {
+                chatCol.classList.remove('hidden');
+                chatCol.classList.add('flex');
+                chatLauncher.classList.add('hidden');
+                
+                if (chatBody.children.length === 0) {
+                    renderWelcomeScreen();
+                }
+            } else {
+                chatCol.classList.add('hidden');
+                chatCol.classList.remove('flex');
+                chatLauncher.classList.remove('hidden');
+            }
+        }
+
+        function resetChat() {
+            chatBody.innerHTML = '';
+            renderWelcomeScreen();
+        }
+
+        function renderWelcomeScreen() {
+            const data = INDUSTRY_DATA[currentIndustry];
+            const theme = THEMES[currentIndustry];
+
+            const container = document.createElement('div');
+            container.className = 'space-y-3 animate-fade-in';
+
+            const botBox = document.createElement('div');
+            botBox.className = `${theme.botMsgBg} p-3.5 rounded-2xl text-xs md:text-sm space-y-1.5 shadow-md`;
+            botBox.innerHTML = `
+                <p class="font-bold text-sm ${theme.botMsgTitle}">${data.welcomeCard.title}</p>
+                <p class="leading-relaxed text-slate-200 text-xs md:text-sm">${data.welcomeCard.text}</p>
+                <p class="leading-relaxed text-slate-300 text-xs"><strong>${data.welcomeCard.note.split(':')[0]}:</strong> ${data.welcomeCard.note.split(':')[1]}</p>
+            `;
+            container.appendChild(botBox);
+
+            const grid = document.createElement('div');
+            grid.className = 'grid grid-cols-2 gap-2 pt-1';
+
+            data.topics.slice(0, 6).forEach(topic => {
+                const btn = document.createElement('button');
+                btn.className = `${theme.topicBtn} font-medium text-xs py-2.5 px-2 shadow-sm transition text-center flex items-center justify-center leading-tight cursor-pointer`;
+                btn.innerText = topic.label;
+                btn.onclick = () => handleButtonClick(topic.label);
+                grid.appendChild(btn);
+            });
+
+            container.appendChild(grid);
+
+            const fullBtn = document.createElement('button');
+            fullBtn.className = `w-full ${theme.topicBtn} font-medium text-xs py-2.5 px-2 shadow-sm transition text-center cursor-pointer`;
+            fullBtn.innerText = data.topics[6].label;
+            fullBtn.onclick = () => handleButtonClick(data.topics[6].label);
+            container.appendChild(fullBtn);
+
+            chatBody.appendChild(container);
+            scrollToBottom();
+        }
+
+        function generateResponse(userQueryText) {
+            const data = INDUSTRY_DATA[currentIndustry];
+
+            if (data.responses[userQueryText]) {
+                return data.responses[userQueryText];
+            }
+
+            const lower = userQueryText.toLowerCase();
+
+            if (currentIndustry === 'hospitality') {
+                if (lower.includes('tisch') || lower.includes('reservier') || lower.includes('essen') || lower.includes('platz')) {
+                    return data.responses['🍽️ Tisch reservieren'];
+                } else if (lower.includes('checkin') || lower.includes('check-in') || lower.includes('checkout') || lower.includes('zimmer') || lower.includes('ankunft')) {
+                    return data.responses['🏨 Check-in / Check-out'];
+                } else if (lower.includes('karte') || lower.includes('speis') || lower.includes('vegan') || lower.includes('allergen') || lower.includes('weinkarte')) {
+                    return data.responses['🍷 Speisekarte & Vegan/Allergene'];
+                } else if (lower.includes('frühstück') || lower.includes('buffet') || lower.includes('kaffee')) {
+                    return data.responses['🥐 Frühstückszeiten & Buffet'];
+                } else if (lower.includes('park') || lower.includes('wlan') || lower.includes('wifi') || lower.includes('internet')) {
+                    return data.responses['🅿️ Parken & WLAN'];
+                } else if (lower.includes('feier') || lower.includes('event') || lower.includes('hochzeit') || lower.includes('geburtstag') || lower.includes('gruppe')) {
+                    return data.responses['🎉 Feiern & Events'];
+                } else if (lower.includes('hallo') || lower.includes('hi') || lower.includes('guten tag')) {
+                    return "Herzlich Willkommen bei uns! Wie kann ich Ihren Aufenthalt oder Ihren Restaurantbesuch heute angenehmer gestalten?";
+                }
+            } else if (currentIndustry === 'craftsman') {
+                if (lower.includes('notdienst') || lower.includes('wasser') || lower.includes('rohr') || lower.includes('dringend') || lower.includes('notfall')) {
+                    return data.responses['🚨 Notdienst & Wasserrohrbruch'];
+                } else if (lower.includes('angebot') || lower.includes('kosten') || lower.includes('preis') || lower.includes('voranschlag')) {
+                    return data.responses['Angebot & Kostenvoranschlag'];
+                } else if (lower.includes('termin') || lower.includes('wann') || lower.includes('buchen')) {
+                    return data.responses['Termin vereinbaren'];
+                } else if (lower.includes('anfahrt') || lower.includes('kilometer') || lower.includes('gebiet') || lower.includes('plz')) {
+                    return data.responses['Anfahrtskosten & Gebiet'];
+                } else if (lower.includes('öffnung') || lower.includes('büro') || lower.includes('zeit')) {
+                    return data.responses['Öffnungszeiten & Büro'];
+                } else if (lower.includes('garantie') || lower.includes('wartung') || lower.includes('gewährleistung')) {
+                    return data.responses['Gewährleistung & Wartung'];
+                } else if (lower.includes('hallo') || lower.includes('hi') || lower.includes('guten tag')) {
+                    return "Hallo! Willkommen beim Handwerker-Kundenservice. Benötigen Sie einen Termin, ein Angebot oder Hilfe bei einem Notdienst?";
+                }
+            } else if (currentIndustry === 'realestate') {
+                if (lower.includes('wohnung') || lower.includes('zimmer') || lower.includes('expose') || lower.includes('exposé') || lower.includes('miete')) {
+                    return data.responses['3-Zimmer Wohnung (Exposé)'];
+                } else if (lower.includes('termin') || lower.includes('besicht') || lower.includes('wann')) {
+                    return data.responses['Besichtigungstermin'];
+                } else if (lower.includes('unterlagen') || lower.includes('schufa') || lower.includes('gehalt') || lower.includes('bewerb')) {
+                    return data.responses['Benötigte Unterlagen'];
+                } else if (lower.includes('provis') || lower.includes('kosten') || lower.includes('makler')) {
+                    return data.responses['Maklerprovision & Kosten'];
+                } else if (lower.includes('tier') || lower.includes('hund') || lower.includes('katze')) {
+                    return data.responses['Haustierhaltung'];
+                } else if (lower.includes('park') || lower.includes('garage') || lower.includes('stellplatz')) {
+                    return data.responses['Stellplatz & Garage'];
+                } else if (lower.includes('hallo') || lower.includes('hi') || lower.includes('guten tag')) {
+                    return "Hallo! Herzlich willkommen bei unserem Immobilien-Service. Suchen Sie nach einer Miet- oder Kaufimmobilie?";
+                }
+            } else {
+                if (lower.includes('versand') || lower.includes('liefer') || lower.includes('dauer') || lower.includes('bestell')) {
+                    return data.responses['Bestellung & Versand'];
+                } else if (lower.includes('rück') || lower.includes('retour') || lower.includes('garantie')) {
+                    return data.responses['Rückgabe & Garantie'];
+                } else if (lower.includes('smart') || lower.includes('app') || lower.includes('alexa')) {
+                    return data.responses['Smart Home Support'];
+                } else if (lower.includes('konto') || lower.includes('login') || lower.includes('passwort')) {
+                    return data.responses['Konto & Login'];
+                } else if (lower.includes('zahl') || lower.includes('paypal') || lower.includes('rechnung') || lower.includes('karte')) {
+                    return data.responses['Zahlungsarten'];
+                } else if (lower.includes('öffnungszeit') || lower.includes('markt') || lower.includes('filiale') || lower.includes('laden')) {
+                    return data.responses['Märkte & Öffnungszeiten'];
+                } else if (lower.includes('hallo') || lower.includes('hi') || lower.includes('guten tag')) {
+                    return "Hallo! Wie kann ich Ihnen heute weiterhelfen? Bitte wählen Sie eines der Themen aus oder stellen Sie Ihre Frage.";
+                }
+            }
+
+            return `Vielen Dank für Ihre Anfrage zu "${userQueryText}". In der vollständigen Integration verbindet sich dieser Bot mit Ihren PDFs, Speisekarten & Reservierungssystemen (RAG), um auch spezifische Fragen sofort präzise zu beantworten.`;
+        }
+
+        function sendApiRequest(userQueryText) {
+            appendUserMessage(userQueryText);
+            const loadingId = appendLoadingIndicator();
+
+            setTimeout(() => {
+                removeLoadingIndicator(loadingId);
+                const botReply = generateResponse(userQueryText);
+                appendBotAnswer(botReply);
+            }, 500);
+        }
+
+        function handleButtonClick(buttonText) {
+            sendApiRequest(buttonText);
+        }
+
+        function handleUserSubmit(event) {
+            event.preventDefault();
+            const input = document.getElementById('user-input');
+            const query = input.value.trim();
+
+            if (!query) return;
+            input.value = '';
+
+            sendApiRequest(query);
+        }
+
+        function appendUserMessage(text) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'flex justify-end my-2 animate-fade-in';
+            const userBubble = document.createElement('div');
+            userBubble.className = 'bg-white text-slate-900 px-3.5 py-2 rounded-2xl rounded-tr-none border border-slate-300 text-xs md:text-sm font-medium shadow-sm max-w-[85%] break-words';
+            userBubble.innerText = text;
+            wrapper.appendChild(userBubble);
+            chatBody.appendChild(wrapper);
+            scrollToBottom();
+        }
+
+        function appendBotAnswer(text) {
+            const theme = THEMES[currentIndustry];
+            const container = document.createElement('div');
+            container.className = 'space-y-2 animate-fade-in';
+
+            const botCard = document.createElement('div');
+            botCard.className = `relative ${theme.botMsgBg} p-3.5 rounded-2xl text-xs md:text-sm space-y-1.5 shadow-md pr-8`;
+            botCard.innerHTML = `
+                <p class="leading-relaxed text-slate-100 text-xs md:text-sm">${text}</p>
+                <div class="absolute -bottom-2 right-2 bg-white border border-slate-300 rounded px-1.5 py-0.5 flex items-center space-x-1.5 text-slate-600 shadow-sm text-[10px]">
+                    <button onclick="rateAnswer(this, 'up')" class="hover:text-emerald-600 transition"><i class="fa-regular fa-thumbs-up"></i></button>
+                    <div class="w-px h-2.5 bg-slate-300"></div>
+                    <button onclick="rateAnswer(this, 'down')" class="hover:text-red-600 transition"><i class="fa-regular fa-thumbs-down"></i></button>
+                </div>
+            `;
+            container.appendChild(botCard);
+            chatBody.appendChild(container);
+            scrollToBottom();
+        }
+
+        function appendLoadingIndicator() {
+            const theme = THEMES[currentIndustry];
+            const id = 'loading-' + Date.now();
+            const wrapper = document.createElement('div');
+            wrapper.id = id;
+            wrapper.className = `${theme.botMsgBg} p-2.5 rounded-xl text-xs w-28 flex items-center space-x-2 animate-fade-in`;
+            wrapper.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Lädt...</span>`;
+            chatBody.appendChild(wrapper);
+            scrollToBottom();
+            return id;
+        }
+
+        function removeLoadingIndicator(id) {
+            const elem = document.getElementById(id);
+            if (elem) elem.remove();
+        }
+
+        function rateAnswer(btn, type) {
+            const parent = btn.parentElement;
+            parent.innerHTML = `<span class="text-[10px] font-semibold ${type === 'up' ? 'text-emerald-600' : 'text-slate-600'}">Danke!</span>`;
+        }
+
+        function scrollToBottom() {
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Initialisierung bei Aufruf
+        window.onload = () => {
+            switchIndustry('general');
+        };
+    </script>
+</body>
+</html>
